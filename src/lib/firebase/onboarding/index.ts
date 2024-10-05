@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-identical-functions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
@@ -81,6 +82,35 @@ export const signOutWithGoogle = async () => {
 };
 
 export const getUserData = async (userId: string) => {
+  if (!userId) {
+    return {
+      status: 400,
+      message: 'User ID is empty/null',
+    };
+  }
+
+  try {
+    const user = await userOperation.getUserData(userId);
+    if (user && user.length === 1) {
+      return {
+        status: 200,
+        data: user,
+        message: 'user data fetched successfully!',
+      };
+    }
+    return {
+      status: 404,
+      message: 'User not found',
+    };
+  } catch (error: any) {
+    return {
+      status: 500,
+      message: `Error fetching user data:${error.message}`,
+    };
+  }
+};
+
+export const getUser = async (userId: string) => {
   if (!userId) {
     return {
       status: 400,
