@@ -5,7 +5,11 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { getUser, onAuthStateChanged } from '../firebase/onboarding';
+import { getUserTransaction } from '../firebase/transactions';
+import type { OriginalTransactionProps } from '../helpers/transformer';
+import { transformTransactions } from '../helpers/transformer';
 import { createSession, removeSession } from '../serverActions/auth';
+import { setTransactions } from '../store/slices/transactions';
 import { setUser } from '../store/slices/user';
 
 export function useUserSession(InitSession?: string | null) {
@@ -16,12 +20,21 @@ export function useUserSession(InitSession?: string | null) {
     const unsubscribe = onAuthStateChanged(async (authUser: User | null) => {
       if (authUser) {
         const { data } = await getUser(authUser.uid);
+
         if (data) {
+          const { data: txnData } = await getUserTransaction(
+            data[0]?.walletId as string
+          );
           dispatch(
             setUser({
               ...data[0],
               createdAt: data[0]?.createdAt?.toDate().toISOString(),
             })
+          );
+          dispatch(
+            setTransactions(
+              transformTransactions(txnData as OriginalTransactionProps[])
+            )
           );
         }
 
