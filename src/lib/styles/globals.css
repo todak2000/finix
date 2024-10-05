@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-4xl font-bold text-[#3F5AB3] md:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl font-bold text-[#3F5AB3] md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl font-bold text-[#3F5AB3] md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl font-bold text-[#3F5AB3];
+  }
+
+  h5 {
+    @apply text-lg font-bold text-[#3F5AB3];
+  }
+
+  .wrapper {
+    @apply mx-auto p-6 sm:p-8;
+    max-width: 48rem;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply bg-[#3F5AB3] text-white; /* Deep Blue */
+    &:hover {
+      background-color: lighten(#3f5ab3, 10%);
+    }
+  }
+
+  .text-primary {
+    @apply text-[#3F5AB3]; /* Deep Blue */
+  }
+  .btn-secondary {
+    @apply bg-[#71B1E7] text-white; /* Vibrant Teal */
+    &:hover {
+      background-color: lighten(#71b1e7, 10%);
+    }
+  }
+
+  .btn-tertiary {
+    @apply border border-[#3F5AB3] bg-transparent text-[#3F5AB3]; /* Deep Blue */
+    &:hover {
+      background-color: #e6f3ff; /* Light blue */
+    }
+  }
+
+  /* Input fields */
+  input {
+    @apply rounded-md border border-[#666666]; /* Medium Gray */
+    &:focus {
+      border: 2px solid #3f5ab3; /* Vibrant Teal */
+    }
+  }
+
+  /* Button styles */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-[#71B1E7] to-[#3F5AB3] text-white; /* Gradient blend */
+    &:hover {
+      background-color: lighten(#3f5ab3, 10%);
+    }
+  }
+
+  /* Card styles */
+  .card {
+    @apply rounded-lg border border-[#F2F2F2] bg-white shadow-md dark:border-transparent dark:bg-gray-800; /* Light Gray */
+  }
+
+  @keyframes gradient-x {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 5s ease infinite;
+  }
+}
