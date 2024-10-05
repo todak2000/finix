@@ -2,20 +2,18 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface UserState {
-  userData: Record<string, unknown> | null;
-}
-
-export const initialUserState: UserState = {
-  userData: {},
-};
+export const initialUserState = {};
 
 const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserState>) => {
-      Object.assign(state, action.payload);
+    setUser: (state, action: PayloadAction<unknown>) => {
+      if (action.payload) {
+        const { createdAt, ...userDataWithoutCreatedAt } =
+          action.payload as Record<string, unknown>; // Exclude createdAt
+        Object.assign(state, userDataWithoutCreatedAt); // Use the modified userData
+      }
     },
   },
 });

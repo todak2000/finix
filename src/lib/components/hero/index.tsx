@@ -3,6 +3,7 @@
 
 'use client';
 
+import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
@@ -13,10 +14,11 @@ import { handleGoogle } from '@/lib/serverActions/onboarding';
 import { heroHeaders } from './constant';
 
 const HeroSection: React.FC = () => {
+  const { push } = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const handleOnboarding = async () => {
     setLoading(true);
-    const res = await handleGoogle();
+    const res = await handleGoogle(push);
     setLoading(false);
 
     console.log(res, 'oboading response');

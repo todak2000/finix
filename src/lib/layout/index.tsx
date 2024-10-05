@@ -1,25 +1,21 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import type { ReactNode } from 'react';
-import { Toaster } from 'react-hot-toast';
+import { cookies } from 'next/headers';
 
 import { ThemeProvider } from '@/lib/components/theme-provider';
 
-import { Footer } from './components/footer';
-import { Header } from './components/header';
+import { SESSION_COOKIE_NAME } from '../serverActions/constants';
+import WrapperComponent from './components/Wrapper';
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 const Layout = ({ children }: LayoutProps) => {
+  const session = cookies().get(SESSION_COOKIE_NAME)?.value || null;
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="flex min-h-screen flex-col">
-        <Toaster />
-        <Header />
-        <main className="wrapper">{children}</main>
-        <Footer />
-      </div>
+      <WrapperComponent session={session}>{children}</WrapperComponent>;
     </ThemeProvider>
   );
 };
