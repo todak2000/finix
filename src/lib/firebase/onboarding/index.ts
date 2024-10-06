@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable sonarjs/no-identical-functions */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -15,6 +16,16 @@ import { firebaseAuth, provider } from '..';
 import Collection from '../db';
 import CRUDOperation from '../functions/CRUDOperation';
 import { createSession, removeSession } from '@/lib/serverActions/auth';
+import { createCircleWallet } from '@/lib/serverActions/circle';
+
+interface UserData {
+  id: string;
+  createdAt: Timestamp;
+  email: string;
+  displayName: string;
+  fullname: string;
+  walletId?: string | null; // Add walletId as an optional property
+}
 
 const userOperation = new CRUDOperation(Collection.Users);
 
@@ -27,7 +38,7 @@ export const signInWithGoogle = async () => {
     const result = await signInWithPopup(firebaseAuth, provider);
 
     if (result && result.user) {
-      const userData = {
+      let userData: UserData = {
         id: result.user.uid as string,
         createdAt: Timestamp.fromDate(new Date()),
         email: result.user.email as string,
@@ -40,6 +51,8 @@ export const signInWithGoogle = async () => {
       );
 
       if (!existingUser) {
+        const walletId = (await createCircleWallet()) ?? null;
+        userData = { ...userData, walletId };
         await userOperation.add(userData);
       }
       createSession(result.user.uid);
@@ -124,6 +137,34 @@ export const getUser = async (userId: string) => {
       return {
         status: 200,
         data: user,
+        message: 'user data fetched successfully!',
+      };
+    }
+    return {
+      status: 404,
+      message: 'User not found',
+    };
+  } catch (error: any) {
+    return {
+      status: 500,
+      message: `Error fetching user data:${error.message}`,
+    };
+  }
+};
+export const getUserByEmail = async (email: string) => {
+  if (!email) {
+    return {
+      status: 400,
+      message: 'Email is empty/null',
+    };
+  }
+
+  try {
+    const user = await userOperation.getUserDataByEmail(email);
+    if (user && user.length === 1) {
+      return {
+        status: 200,
+        data: user[0],
         message: 'user data fetched successfully!',
       };
     }
