@@ -1,10 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import type { ReactNode } from 'react';
 import { cookies } from 'next/headers';
-
-import { ThemeProvider } from '@/lib/components/theme-provider';
+import type { ReactNode } from 'react';
 
 import { SESSION_COOKIE_NAME } from '../serverActions/constants';
+import { ThemeProvider } from '@/lib/components/theme-provider';
+
 import WrapperComponent from './components/Wrapper';
 
 type LayoutProps = {
