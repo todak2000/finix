@@ -12,9 +12,12 @@ import LoaderSpin from '../loaders/LoaderSpin';
 import { handleGoogle } from '@/lib/serverActions/onboarding';
 
 import { ctaContent } from './constant';
+import { useSelector } from 'react-redux';
+import { user } from '@/lib/store';
 
 const CallToAction: React.FC = () => {
   const { push } = useRouter();
+  const userr = useSelector(user);
   const [loading, setLoading] = useState<boolean>(false);
   const handleOnboarding = async () => {
     setLoading(true);
@@ -29,20 +32,22 @@ const CallToAction: React.FC = () => {
       <div className="container mx-auto space-y-6 px-4 text-center">
         <h2 className="mb-4 font-bold">{ctaContent.header}</h2>
         <p className="mb-6">{ctaContent.subHeader}</p>
-        <button
-          type="button"
-          onClick={handleOnboarding}
-          className="btn-gradient mx-auto flex flex-row items-center justify-center space-x-3 rounded-full px-4 py-3 text-xs"
-        >
-          {loading ? (
-            <LoaderSpin />
-          ) : (
-            <>
-              {' '}
-              <span>Sign Up Now with</span> <FcGoogle className="text-lg" />
-            </>
-          )}
-        </button>
+        {userr && (userr as { displayName: string }).displayName && (
+          <button
+            type="button"
+            onClick={handleOnboarding}
+            className="btn-gradient mx-auto flex flex-row items-center justify-center space-x-3 rounded-full px-4 py-3 text-xs"
+          >
+            {loading ? (
+              <LoaderSpin />
+            ) : (
+              <>
+                {' '}
+                <span>Sign Up Now with</span> <FcGoogle className="text-lg" />
+              </>
+            )}
+          </button>
+        )}
       </div>
     </section>
   );

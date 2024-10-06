@@ -4,11 +4,13 @@ import type { User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { getWalletBalance } from '../circle/circle';
 import { getUser, onAuthStateChanged } from '../firebase/onboarding';
 import { getUserTransaction } from '../firebase/transactions';
 import type { OriginalTransactionProps } from '../helpers/transformer';
 import { transformTransactions } from '../helpers/transformer';
 import { createSession, removeSession } from '../serverActions/auth';
+import { setBalance } from '../store/slices/balance';
 import { setTransactions } from '../store/slices/transactions';
 import { setUser } from '../store/slices/user';
 
@@ -25,6 +27,10 @@ export function useUserSession(InitSession?: string | null) {
           const { data: txnData } = await getUserTransaction(
             data[0]?.walletId as string
           );
+          const { data: walletData } = await getWalletBalance(
+            data[0]?.walletId as string
+          );
+
           dispatch(
             setUser({
               ...data[0],
@@ -36,6 +42,9 @@ export function useUserSession(InitSession?: string | null) {
               transformTransactions(txnData as OriginalTransactionProps[])
             )
           );
+          const balanceAmount =
+            walletData.balances.length > 0 ? walletData.balances[0].amount : 0;
+          dispatch(setBalance({ value: Number(balanceAmount) }));
         }
 
         !userUid && createSession(authUser.uid);

@@ -39,7 +39,7 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => {
         />
         <FaCopy
           onClick={handleCopy}
-          className="absolute bottom-auto right-1 top-auto cursor-pointer text-[#71B1E7]"
+          className="absolute bottom-auto right-1 top-auto cursor-pointer text-[#71B1E7] dark:invert"
           title="Copy"
         />
       </div>
@@ -73,7 +73,9 @@ const BankInstructions = ({ data: instructions }: { data: any }) => {
 
   return (
     <div className="font-roboto flex min-w-[300px] max-w-[320px] flex-col items-center justify-center gap-2 md:max-w-[500px] md:px-12">
-      <h5 className="font-merry text-center text-sm">Payment Instructions</h5>
+      <h5 className="font-merry text-center text-sm dark:invert">
+        Payment Instructions
+      </h5>
       <span
         className="bg-[#3f5ab32d] p-3 text-center text-xs text-[#3F5AB3] md:p-6"
         dangerouslySetInnerHTML={{ __html: paymentWarning }}

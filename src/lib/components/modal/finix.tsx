@@ -25,6 +25,8 @@ import { Toast } from '@/lib/helpers/Toast';
 import type { OriginalTransactionProps } from '@/lib/helpers/transformer';
 import { transformTransactions } from '@/lib/helpers/transformer';
 import { user } from '@/lib/store';
+import { updateBalance } from '@/lib/store/slices/balance';
+import { setModal } from '@/lib/store/slices/modal';
 import { setTransactions } from '@/lib/store/slices/transactions';
 
 const Finix = () => {
@@ -62,11 +64,19 @@ const Finix = () => {
         };
 
         await recordTransaction(txnData);
+
         const { data: txnnData } = await getUserTransaction(userData.walletId);
         dispatch(
           setTransactions(
             transformTransactions(txnnData as OriginalTransactionProps[])
           )
+        );
+
+        dispatch(
+          updateBalance({
+            value: amountToDeposit as number,
+            operation: 'subtract',
+          })
         );
         return { status: 200 };
       } else {
@@ -78,7 +88,7 @@ const Finix = () => {
       Toast.error({
         msg: 'An error occurred while initiating the deposit. Please try again.',
       });
-      console.error(error);
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -86,8 +96,8 @@ const Finix = () => {
 
   return (
     <div className="font-roboto flex min-w-[300px] max-w-[320px] flex-col items-center justify-center gap-6 md:max-w-[500px]">
-      <h5 className="font-merry text-center text-sm">
-        Enter Amount to Withdraw
+      <h5 className="font-merry text-center text-sm dark:invert">
+        Enter Amount to Send
       </h5>
       <div className="w-full bg-white py-6">
         <form
@@ -95,7 +105,8 @@ const Finix = () => {
             e.preventDefault();
             const res = await handleTransfer();
             if (res && res.status === 200)
-              Toast.success({ msg: 'Transfer successfull!' });
+              dispatch(setModal({ open: false, type: '' }));
+            Toast.success({ msg: 'Transfer successfull!' });
           }}
         >
           <input
@@ -117,7 +128,7 @@ const Finix = () => {
           <button
             type="submit"
             disabled={loading}
-            className="btn-gradient flex w-full flex-row items-center justify-center rounded px-4 py-2 font-bold text-white hover:opacity-70"
+            className="btn-gradient flex w-full flex-row items-center justify-center rounded px-4 py-2 font-bold text-white hover:opacity-70 dark:invert"
           >
             {loading ? <LoaderSpin /> : `Send`}
           </button>

@@ -89,7 +89,7 @@ const Bank = () => {
 
   return (
     <div className="font-roboto flex min-w-[300px] max-w-[320px] flex-col items-center justify-center gap-6 md:max-w-[500px]">
-      <h5 className="font-merry text-center text-sm">
+      <h5 className="font-merry text-center text-sm dark:invert">
         Enter Amount to Deposit
       </h5>
       <div className="w-full bg-white py-6">
@@ -119,7 +119,7 @@ const Bank = () => {
           <button
             type="submit"
             disabled={loading}
-            className="btn-gradient flex w-full flex-row items-center justify-center rounded px-4 py-2 font-bold text-white hover:opacity-70"
+            className="btn-gradient flex w-full flex-row items-center justify-center rounded px-4 py-2 font-bold text-white hover:opacity-70 dark:invert"
           >
             {loading ? <LoaderSpin /> : `Submit`}
           </button>

@@ -29,7 +29,9 @@ const WithdrawOptions = () => {
 
   return (
     <div className="font-roboto flex min-w-[300px] max-w-[320px] flex-col items-center justify-center gap-6">
-      <h5 className="font-merry text-center text-sm">Withdrawal Options</h5>
+      <h5 className="font-merry text-center text-sm dark:invert">
+        Withdrawal Options
+      </h5>
       <div className="mb-6 w-full space-y-3">
         {arr.map((i) => {
           return (
@@ -37,7 +39,7 @@ const WithdrawOptions = () => {
               type="button"
               key={i.name}
               onClick={i.onClick}
-              className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border border-[#3F5AB3] px-6 py-3 text-[#3F5AB3] hover:opacity-70"
+              className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border border-[#3F5AB3] px-6 py-3 text-[#3F5AB3] hover:opacity-70 dark:invert"
             >
               {i.icon}
               {i.name}

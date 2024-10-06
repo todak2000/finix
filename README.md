@@ -1,64 +1,143 @@
-<img src="https://og.sznm.dev/api/generate?heading=nextarter-tailwind&text=Next.js+(App+Router)+template+with+TailwindCSS+and+TypeScript+setup.&template=color&center=true&height=320" />
+# Finix: Digital Dollar Access - Technical Documentation
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https://github.com/sozonome/nextarter-tailwind) [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sozonome/nextarter-tailwind)
+## Introduction
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/sozonome/nextarter-tailwind)
+### Purpose
+Finix is a web application designed to provide global access to digital dollars, enabling users to hold and transact in USDC (USD Coin) without needing a traditional bank account. 
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app), added with [**TailwindCSS**](https://tailwindcss.com) and [**TypeScript**](https://www.typescriptlang.org) setup.
-Start developing right away!
+### Scope
+This document outlines the technical requirements and architecture for the Minimum Viable Product (MVP) of Finix, focusing on core functionalities that leverage Circle's blockchain technology.
 
-## 🔋⚡ Super Battery Packed template
 
-- 🚀 **Next.js 13 (App Router)** - **React 18**
-- ⛓️ **TypeScript**
-- **TailwindCSS** v3
-  - recommended to extend with one of these:
-    - [shadcn/ui](https://ui.shadcn.com/)
-    - [tremor](https://www.tremor.so/)
-    - [flowbite-react](https://www.flowbite-react.com/)
-    - [daisyUI](https://daisyui.com/)
-    - [Headless UI](https://headlessui.com/)
-    - [Mantine](https://mantine.dev)
-    - [NextUI v2](https://github.com/nextui-org/nextui/discussions/1035)
-- ✔️ **toolings** for linting, formatting, and conventions configured
-  - `eslint`, `prettier`, `husky`, `lint-staged`, `commitlint`, `commitizen`, and `standard-version`
-  - `pre-commit`, `pre-push`, `commit-msg`, `prepare-commit-msg` hook configured
-- 📱 **PWA-ready** - `next-pwa` configured, enabled by default, just disable it through `next.config.js`
-- 🔎 SEO optimization configured - with `next-seo` and `next-sitemap`.
-  - you'll need to reconfigure or tinker with it to get it right according to your needs, but it's there if you need it.
-- 🎨 basic responsive layout configured - don't need it? just remove it 😃
-- 🤖 **Automatic Dependency Update** with [Renovate](https://renovatebot.com/)
-- 🏎️ **Turbo** setup
+## Product Overview
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-tailwind&metric=alert_status)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-tailwind) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-tailwind&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-tailwind) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-tailwind&metric=bugs)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-tailwind) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-tailwind&metric=code_smells)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-tailwind) [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=sozonome_nextarter-tailwind&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=sozonome_nextarter-tailwind)
+### Product Vision
+To democratize access to stable digital currency, providing a secure and user-friendly platform for holding, sending, and receiving USDC globally.
 
-## Getting Started
+### Key Features
+1. User-controlled USDC wallets
+2. Social login authentication
+3. USDC transactions (send/receive)
+4. Fiat currency on/off ramps
+5. Transaction history and analytics
+6. Admin dashboard for enterprise clients (TODO)
 
-You can either click `Use this template` button on this repository and clone the repo or directly from your terminal:
+## Technical Architecture
 
-```bash
-npx degit sozonome/nextarter-tailwind <APP_NAME>
-```
+### Frontend
+- **Framework**: Next.js
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript
 
-Install packages:
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Next.js (API routes)
+- **Key Libraries**:
+  - Circle's APIs for USDC transactions and account management
+  - Firebase for user data and transaction records
 
-```bash
-pnpm i
-```
+### Database
+- **Database**: Firebase
+- **Data Management**: User data and transaction records are stored securely with data encryption at rest.
 
-Then, run the development server:
+### Hosting and Deployment
+- **Platform**: Vercel
+- **CI/CD**: Implemented for automated testing and deployment.
 
-```bash
-pnpm dev
-```
+## Functional Requirements
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### User Authentication
+- Implement social login (Google only) using Firebase.
+- Support email and password registration as a fallback. (TODO)
+- Implement two-factor authentication (2FA) for added security such as email verification or OTP (TODO)
 
-You can start editing the page by modifying `src/pages/index.tsx`. The page auto-updates as you edit the file.
+### Wallet Management
+- Create and manage developer-controlled USDC wallets using Circle Mint.
+- Display real-time USDC balance.
 
-## References
+### Transactions
+- Enable sending USDC to other users on Finix using their emails just like PayPal.
+- Enable sending USDC to external addresses like bank accounts.
+- Support receiving USDC from other users on Finix.
+- Support receiving USDC from other users via bank or external sources. (TODO)
+- Implement transaction list/table.
+- Implement transaction confirmation and receipt generation. (TODO)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [TailwindCSS](https://tailwindcss.com)
-- [TypeScript](https://www.typescriptlang.org)
+### Fiat On/Off Ramps
+- Integrate Circle's Payments API for buying/minting USDC with local currencies via bank.
+- Support withdrawal of USDC to local bank accounts or payment systems. (TODO)
+
+### Analytics and Reporting (TODO)
+- Provide detailed transaction history with search and filter capabilities.
+- Generate basic financial reports (e.g., monthly summaries).
+
+### Admin Dashboard (TODO)
+- Create user management tools for enterprise clients.
+- Implement role-based access control.
+
+## Development Guidelines
+
+### Setting Up the Development Environment
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/todak2000/finix.git
+   cd finix
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   pnpm install
+   ```
+
+3. **Environment Variables**:
+   - Create a `.env.local` file in the root directory and add the necessary environment variables for Circle's API and Firebase configuration.
+
+   #### Firebase API Keys
+   To obtain your Firebase API keys:
+   - Go to the [Firebase Console](https://console.firebase.google.com/).
+   - Create a new project or select an existing one.
+   - Navigate to **Project Settings** (gear icon).
+   - Under the **General** tab, find your **Web Apps** section and click on your app.
+   - Copy the following configuration values and add them to your `.env.local` file:
+     ```
+     NEXT_PUBLIC_API_KEY=your_firebase_api_key
+     NEXT_PUBLIC_AUTH_DOMAIN=your_project_id.firebaseapp.com
+     NEXT_PUBLIC_PROJECT_ID=your_project_id
+     NEXT_PUBLIC_STORAGE_BUCKET=your_project_id.appspot.com
+     NEXT_PUBLIC_MESSAGING_SENDER_ID=your_messaging_sender_id
+     NEXT_PUBLIC_APP_ID=your_app_id
+     ```
+
+   #### Circle API Keys
+   To obtain your Circle API keys:
+   - Go to the [Circle Developer Dashboard](https://dashboard.circle.com/).
+   - Sign up or log in to your account.
+   - Create a new application in the dashboard.
+   - Once created, navigate to the application settings to find your API keys.
+   - Copy the following configuration value and add it to your `.env.local` file:
+     ```
+     NEXT_PUBLIC_CIRCLE_API_KEY=your_circle_api_key
+     ```
+
+   #### Example `.env.local` File
+   ```plaintext
+   NEXT_PUBLIC_API_KEY=your_firebase_api_key
+   NEXT_PUBLIC_AUTH_DOMAIN=your_project_id.firebaseapp.com
+   NEXT_PUBLIC_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_STORAGE_BUCKET=your_project_id.appspot.com
+   NEXT_PUBLIC_MESSAGING_SENDER_ID=your_messaging_sender_id
+   NEXT_PUBLIC_APP_ID=your_app_id
+   NEXT_PUBLIC_DOMAIN=<your_deployed_url_link>
+   NEXT_PUBLIC_CIRCLE_API_KEY=your_circle_api_key
+   ```
+
+4. **Run the Development Server**:
+   ```bash
+   pnpm dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+### Code Structure
+- **Frontend**: Located in the `src` directory, with pages and components organized for easy navigation.
+- **Backend**: API routes are defined in the `src/app/api` directory, handling requests related to user authentication, wallet management, and transactions.
+

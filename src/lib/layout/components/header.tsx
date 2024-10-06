@@ -16,6 +16,7 @@ import { useUserSession } from '@/lib/hooks/session';
 import { handleGoogle } from '@/lib/serverActions/onboarding';
 
 import { navbarContent } from './constants';
+import { RiDashboardLine } from 'react-icons/ri';
 
 export const Header = ({
   isHome,
@@ -31,10 +32,8 @@ export const Header = ({
   const [loading, setLoading] = useState<boolean>(false);
   const handleOnboarding = async () => {
     setLoading(true);
-    const res = await handleGoogle(push);
+    await handleGoogle(push);
     setLoading(false);
-
-    console.log(res, 'oboading response');
   };
   return (
     <header className="border-primary sticky top-0 z-10 w-full border-b backdrop-blur-md">
@@ -88,6 +87,15 @@ export const Header = ({
                 </button>
               )}
             </>
+          )}
+          {userSessionId && (
+            <Link
+              href="/dashboard"
+              className="flex flex-row items-center gap-2 font-logo text-sm font-medium hover:opacity-70"
+            >
+              <RiDashboardLine />
+              Dashboard
+            </Link>
           )}
           <ThemeToggle />
         </div>
