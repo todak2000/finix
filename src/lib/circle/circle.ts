@@ -5,7 +5,7 @@ import { fetchUserIP } from '../utils/ipAddress';
 import { defaultCurrency, transferType } from './constants';
 
 const CIRCLE_API_BASE_URL = 'https://api-sandbox.circle.com';
-const CIRCLE_API_KEY =process.env.NEXT_PUBLIC_CIRCLE_API_KEY;
+const CIRCLE_API_KEY = process.env.NEXT_PUBLIC_CIRCLE_API_KEY;
 
 if (!CIRCLE_API_KEY) {
   throw new Error('CIRCLE_API_KEY is not set in environment variables');
