@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
+import { RiDashboardLine } from 'react-icons/ri';
 
 import LoaderSpin from '@/lib/components/loaders/LoaderSpin';
 import { ThemeToggle } from '@/lib/components/theme-toggle';
@@ -16,7 +17,6 @@ import { useUserSession } from '@/lib/hooks/session';
 import { handleGoogle } from '@/lib/serverActions/onboarding';
 
 import { navbarContent } from './constants';
-import { RiDashboardLine } from 'react-icons/ri';
 
 export const Header = ({
   isHome,

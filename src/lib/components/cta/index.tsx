@@ -7,13 +7,13 @@ import { useRouter } from 'next/navigation';
 import type React from 'react';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
+import { useSelector } from 'react-redux';
 
 import LoaderSpin from '../loaders/LoaderSpin';
 import { handleGoogle } from '@/lib/serverActions/onboarding';
+import { user } from '@/lib/store';
 
 import { ctaContent } from './constant';
-import { useSelector } from 'react-redux';
-import { user } from '@/lib/store';
 
 const CallToAction: React.FC = () => {
   const { push } = useRouter();
