@@ -127,7 +127,9 @@ const WalletBalance = ({ name, bal }: { name: string; bal: number }) => {
         ${formatAsMoney(bal)}
       </p>
       <div className="flex items-center">
-        <p className="text-lg font-normal text-[#3F5AB3] dark:invert">{name}</p>
+        <p className="text-lg font-normal text-[#3F5AB3] dark:invert">
+          Wallet ID: {name}
+        </p>
         <FaCopy
           className="ml-2 cursor-pointer text-2xl text-gray-400 hover:opacity-70"
           onClick={handleCopy}
