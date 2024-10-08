@@ -15,10 +15,10 @@ import { Timestamp } from 'firebase/firestore';
 import { firebaseAuth, provider } from '..';
 import Collection from '../db';
 import CRUDOperation from '../functions/CRUDOperation';
-import { createSession, removeSession } from '@/lib/serverActions/auth';
-import { createCircleWallet } from '@/lib/serverActions/circle';
 import { createTransferWalletToWallet } from '@/lib/circle/circle';
 import { merchantWalletID } from '@/lib/circle/constants';
+import { createSession, removeSession } from '@/lib/serverActions/auth';
+import { createCircleWallet } from '@/lib/serverActions/circle';
 
 interface UserData {
   id: string;

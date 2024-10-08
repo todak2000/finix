@@ -210,7 +210,6 @@ const TransactionTable = ({
 }) => {
   const dispatch = useDispatch();
   const handleConfirmation = async (id: string, transactionState: string) => {
-
     const checkRes = await checkPayment(id, transactionState);
 
     if (checkRes.status === 200 && checkRes.data) {
