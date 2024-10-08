@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-console */
 /* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
@@ -105,7 +106,12 @@ const DepositCard = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
-    if (depositData.amount !== '') {
+    if (Number(depositData.amount) > 300) {
+      Toast.error({
+        msg: 'Oops! Please enter an amount less than or equal to $300.',
+      });
+      setLoading(false);
+    } else if (depositData.amount !== '') {
       await depositViaCard();
     } else {
       setLoading(false);
@@ -118,6 +124,9 @@ const DepositCard = () => {
       <h5 className="font-merry text-center text-sm dark:invert">
         Deposit with Card
       </h5>
+      <span className="my-2 bg-[#3f5ab32d] p-3 text-center text-xs text-[#3F5AB3] md:p-6">
+        Please you can't deposit more than <strong>$300</strong> at a time.
+      </span>
       <div className="w-full bg-white pb-6">
         {depositData.paidAmount > 0 && (
           <p className="my-3 rounded-lg p-2 text-center text-sm text-[#3F5AB3]">
