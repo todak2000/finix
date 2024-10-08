@@ -60,14 +60,6 @@ export const Header = ({
                     </Link>
                   );
                 })}
-                {userSessionId && (
-                  <Link
-                    href="/dashboard"
-                    className="font-logo text-sm font-medium hover:opacity-70"
-                  >
-                    Dashboard
-                  </Link>
-                )}
               </nav>
               {!userSessionId && (
                 <button
