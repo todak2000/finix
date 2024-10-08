@@ -27,7 +27,7 @@ const DashboardWrapper = ({
   ];
   return (
     <div className="flex h-screen w-full flex-row justify-between md:overflow-hidden">
-      <aside className="hidden h-screen w-48 min-w-16 -translate-x-full bg-white transition-transform dark:invert sm:translate-x-0 md:block">
+      <aside className="hidden h-screen w-48 min-w-16 -translate-x-full border-r bg-white transition-transform dark:invert sm:translate-x-0 md:block">
         <div className="dark:inverted h-full overflow-y-auto px-3 py-4">
           <ul className="flex flex-col space-y-5 p-6 font-medium">
             <Image
@@ -55,7 +55,7 @@ const DashboardWrapper = ({
           <ThemeToggle />
         </span>
       </aside>
-      <main className="h-screen w-full max-w-full bg-[#71B1E726] p-6 md:w-[calc(100vw-170px)]">
+      <main className="w-full max-w-full p-6 md:h-screen md:w-[calc(100vw-170px)]">
         {children}
       </main>
     </div>

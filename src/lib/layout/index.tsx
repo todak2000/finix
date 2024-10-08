@@ -15,7 +15,7 @@ const Layout = ({ children }: LayoutProps) => {
   const session = cookies().get(SESSION_COOKIE_NAME)?.value || null;
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <WrapperComponent session={session}>{children}</WrapperComponent>;
+      <WrapperComponent session={session}>{children}</WrapperComponent>
     </ThemeProvider>
   );
 };

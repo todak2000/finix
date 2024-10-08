@@ -20,6 +20,7 @@ import {
   getUserTransaction,
   recordTransaction,
 } from '@/lib/firebase/transactions';
+import { finixFees } from '@/lib/helpers/formatMoney';
 import { Toast } from '@/lib/helpers/Toast';
 import type { OriginalTransactionProps } from '@/lib/helpers/transformer';
 import { transformTransactions } from '@/lib/helpers/transformer';
@@ -58,12 +59,16 @@ const DepositCard = () => {
           | 'failed',
         walletId: userData.walletId,
       };
-      const r = await mockCardDeposit({
+      const { data } = await mockCardDeposit({
         amount: depositData.amount,
         walletId: userData.walletId,
       });
-      console.log(r, 'deposit i card resilt');
-      await recordTransaction(txnData);
+      await recordTransaction({
+        ...txnData,
+        transactionId: data.id,
+        amount: finixFees(depositData.amount).paidAmount,
+        fees: finixFees(depositData.amount).fees,
+      });
       const { data: txnnData } = await getUserTransaction(userData.walletId);
       dispatch(
         setTransactions(

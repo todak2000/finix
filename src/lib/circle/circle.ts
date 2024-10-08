@@ -30,7 +30,6 @@ async function circleApiRequest(
   const options: RequestInit = {
     method,
     headers,
-    // mode: 'no-cors',
     body: body ? JSON.stringify(body) : undefined,
   };
 
@@ -86,6 +85,9 @@ export async function getWireInstructions(wireId: string) {
   return circleApiRequest(
     `/v1/businessAccount/banks/wires/${wireId}/instructions`
   );
+}
+export async function getPaymentConfirmation(paymentId: string) {
+  return circleApiRequest(`/v1/payments/${paymentId}`);
 }
 
 export async function makeMockDeposit(data: {

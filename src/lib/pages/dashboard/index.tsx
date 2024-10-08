@@ -15,10 +15,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { paymentState } from '@/lib/circle/constants';
 import LoaderSpin from '@/lib/components/loaders/LoaderSpin';
 import { ThemeToggle } from '@/lib/components/theme-toggle';
+import { checkPayment } from '@/lib/firebase/transactions';
 import { convertTimestamp } from '@/lib/helpers/DateFormatterTemplate';
 import { formatAsMoney } from '@/lib/helpers/formatMoney';
+import type { OriginalTransactionProps } from '@/lib/helpers/transformer';
+import { transformTransactions } from '@/lib/helpers/transformer';
+import useIsMobile from '@/lib/hooks/isMobile';
 import { balance, transactions, user } from '@/lib/store';
+import { updateBalance } from '@/lib/store/slices/balance';
 import { setModal } from '@/lib/store/slices/modal';
+import { setTransactions } from '@/lib/store/slices/transactions';
 import { cn } from '@/lib/styles/utils';
 
 export interface TransactionProps {
@@ -29,6 +35,7 @@ export interface TransactionProps {
   paymentState: string;
   paymentType: string;
   purpose: string;
+  fees: string | number;
   sender: string;
   reciever: string;
   transactionId: string;
@@ -37,7 +44,7 @@ export interface TransactionProps {
 }
 const Header = ({ name }: { name: string }) => {
   const dispatch = useDispatch();
-
+  const isMobile = useIsMobile();
   const handleFund = () => {
     dispatch(setModal({ open: true, type: 'funding-options' }));
   };
@@ -63,7 +70,7 @@ const Header = ({ name }: { name: string }) => {
         <button
           onClick={handleFund}
           type="button"
-          className="btn-gradient flex flex-row items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-normal"
+          className="btn-gradient flex flex-row items-center justify-center gap-2 rounded-lg px-4 py-2 text-xs font-normal md:text-sm"
         >
           {' '}
           Deposit <FiArrowDownLeft />{' '}
@@ -72,16 +79,16 @@ const Header = ({ name }: { name: string }) => {
         <button
           type="button"
           onClick={handleWithdrawal}
-          className="flex flex-row items-center justify-center gap-2 rounded-lg border border-[#222222] px-4 py-2 text-sm font-normal dark:border-white"
+          className="flex flex-row items-center justify-center gap-2 rounded-lg border border-[#222222] px-4 py-2 text-xs font-normal dark:border-white md:text-sm"
         >
-          Send Fund <FaLocationArrow />
+          Send {isMobile ? '' : 'Fund'} <FaLocationArrow />
         </button>
         <button
           type="button"
           onClick={handleBank}
-          className="flex flex-row items-center justify-center gap-2 rounded-lg border border-[#222222] px-4 py-2 text-sm font-normal dark:border-white"
+          className="flex flex-row items-center justify-center gap-2 rounded-lg border border-[#222222] px-4 py-2 text-xs font-normal dark:border-white md:text-sm"
         >
-          Add Bank Details <LuPlus />
+          Add Bank {isMobile ? '' : 'Details'} <LuPlus />
         </button>
       </div>
     </div>
@@ -201,15 +208,41 @@ const TransactionTable = ({
   data: TransactionProps[];
   walletId: string;
 }) => {
+  const dispatch = useDispatch();
+  const handleConfirmation = async (id: string, transactionState: string) => {
+    const checkRes = await checkPayment(id, transactionState);
+
+    if (checkRes.status === 200 && checkRes.data) {
+      dispatch(
+        setTransactions(
+          transformTransactions([checkRes.data] as OriginalTransactionProps[])
+        )
+      );
+      checkRes.data.paymentState === paymentState.paid &&
+        dispatch(
+          updateBalance({
+            value: Number(checkRes.data.amount),
+            operation: 'add',
+          })
+        );
+    }
+  };
   return (
     <div className="max-h-[480px] overflow-y-auto p-6">
       {data &&
         data.length > 0 &&
         data.map((txn) => {
           return (
-            <div
+            <button
+              type="button"
+              onClick={() =>
+                handleConfirmation(
+                  txn.transactionId ?? txn.id,
+                  txn.paymentState
+                )
+              }
               key={txn.transactionId}
-              className="my-6 flex flex-row items-center justify-between dark:invert"
+              className="my-6 flex w-full flex-row items-center justify-between dark:invert"
             >
               <div className="left flex flex-row items-center space-x-6">
                 {txn.reciever === walletId ? (
@@ -218,17 +251,23 @@ const TransactionTable = ({
                   <LuArrowUpToLine className="text-2xl text-red-400" />
                 )}
                 <div className="right flex flex-col gap-3">
-                  <p className="text-sm font-medium text-[#222222]">
+                  <p className="text-left text-sm font-medium text-[#222222]">
                     {txn.purpose}
                   </p>
-                  <p className="text-xs font-normal text-gray-500">
+                  <p className="text-left text-xs font-normal text-gray-500">
                     {convertTimestamp(txn.createdAt)}
+                  </p>
+                  <p className="mt-[-0.5rem] block text-left text-xs font-normal text-gray-500 md:hidden">
+                    charges: ${formatAsMoney(txn.fees ?? 0)}
                   </p>
                 </div>
               </div>
               <div className="right flex flex-col gap-3">
                 <p className="text-right text-sm font-medium text-[#222222]">
                   ${formatAsMoney(txn.amount)}
+                </p>
+                <p className="hidden text-right text-xs font-normal text-gray-500 md:block">
+                  charges: ${formatAsMoney(txn.fees ?? 0)}
                 </p>
                 <p
                   className={cn('text-right text-xs font-normal dark:invert', {
@@ -241,7 +280,7 @@ const TransactionTable = ({
                   {txn.paymentState}
                 </p>
               </div>
-            </div>
+            </button>
           );
         })}
     </div>
@@ -261,7 +300,7 @@ const Dashboard = () => {
   const bal = useSelector(balance);
 
   return (
-    <div className="overflow-y-auto md:h-[80vh] md:overflow-hidden">
+    <div className="overflow-y-auto md:h-[90vh] md:overflow-hidden">
       {walletId && data ? (
         <>
           <Header
@@ -273,7 +312,7 @@ const Dashboard = () => {
               <Converter />
             </div>
             <div className="my-6 w-full py-6 md:my-0 md:w-2/3 md:px-12 md:py-0">
-              <p className="text-xl font-bold text-[#222222] dark:text-white">
+              <p className="mb-6 text-xl font-bold text-[#222222] dark:text-white">
                 Recent transactions
               </p>
               {txns && txns.length > 0 ? (

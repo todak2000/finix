@@ -204,4 +204,51 @@ export default class CRUDOperation<T> {
       throw new Error(errMessage);
     }
   }
+
+  async getSingleTransaction(transactionId: string) {
+    try {
+      const firestoreDoc = doc(db, this.collectionName, transactionId); // Get the document reference
+      const docSnapshot = await getDoc(firestoreDoc); // Fetch the document snapshot
+
+      if (docSnapshot.exists()) {
+        return {
+          transactionId: docSnapshot.id,
+          walletId: docSnapshot.data()?.walletId as string, // Ensure walletId is included
+          amount: docSnapshot.data()?.amount as string,
+          ...docSnapshot.data(), // Return the transaction data
+        };
+      }
+
+      return null; // Return null if the document does not exist
+    } catch (error: unknown) {
+      throw new Error('An error occurred while fetching documents');
+    }
+  }
+
+  async updateKey(
+    id: string,
+    key: string,
+    value:
+      | string
+      | number
+      | boolean
+      | null
+      | Record<string, string | number | boolean | object | null>
+  ) {
+    try {
+      const firestoreDoc = doc(db, this.collectionName, id);
+      const docSnapshot = await getDoc(firestoreDoc); // Fetch the document snapshot
+
+      if (docSnapshot.exists()) {
+        await setDoc(firestoreDoc, { [key]: value }, { merge: true }); // Update the document
+
+        // Fetch the updated document snapshot
+        const updatedDocSnapshot = await getDoc(firestoreDoc);
+        return updatedDocSnapshot.data(); // Return the updated document data
+      }
+      return null; // Return null if the document does not exist
+    } catch (error: unknown) {
+      throw new Error(errMessage);
+    }
+  }
 }
