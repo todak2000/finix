@@ -30,7 +30,7 @@ async function circleApiRequest(
   const options: RequestInit = {
     method,
     headers,
-    mode: 'no-cors',
+    // mode: 'no-cors',
     body: body ? JSON.stringify(body) : undefined,
   };
 
