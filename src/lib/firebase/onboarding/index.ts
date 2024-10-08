@@ -17,6 +17,8 @@ import Collection from '../db';
 import CRUDOperation from '../functions/CRUDOperation';
 import { createSession, removeSession } from '@/lib/serverActions/auth';
 import { createCircleWallet } from '@/lib/serverActions/circle';
+import { createTransferWalletToWallet } from '@/lib/circle/circle';
+import { merchantWalletID } from '@/lib/circle/constants';
 
 interface UserData {
   id: string;
@@ -54,12 +56,19 @@ export const signInWithGoogle = async () => {
         const walletId = (await createCircleWallet()) ?? null;
         userData = { ...userData, walletId };
         await userOperation.add(userData);
+        walletId &&
+          (await createTransferWalletToWallet({
+            sourceWalletId: merchantWalletID,
+            destinationWalletId: walletId as string,
+            amount: '10',
+          }));
       }
       createSession(result.user.uid);
 
       return {
         status: 200,
-        message: 'Successful!',
+        message:
+          'Yah! welcome on board, you have just recieved a welcome bonus of $10.',
         user:
           existingUser && existingUser.length === 1
             ? existingUser[0]

@@ -62,9 +62,9 @@ const Finix = () => {
             | 'failed',
           walletId: userData.walletId,
         };
-
-        await recordTransaction(txnData);
-
+        console.log(txnData, 'data txn');
+        const c = await recordTransaction(txnData);
+        console.log(c, 'data txn');
         const { data: txnnData } = await getUserTransaction(userData.walletId);
         dispatch(
           setTransactions(
@@ -78,6 +78,7 @@ const Finix = () => {
             operation: 'subtract',
           })
         );
+        Toast.success({ msg: 'Transfer successfull!' });
         return { status: 200 };
       } else {
         Toast.error({
@@ -106,7 +107,6 @@ const Finix = () => {
             const res = await handleTransfer();
             if (res && res.status === 200)
               dispatch(setModal({ open: false, type: '' }));
-            Toast.success({ msg: 'Transfer successfull!' });
           }}
         >
           <input

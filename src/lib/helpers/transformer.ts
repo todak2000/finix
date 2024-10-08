@@ -10,6 +10,7 @@ export interface OriginalTransactionProps {
   paymentType: string;
   purpose: string;
   sender: string;
+  fees: string;
   reciever: string;
   transactionId: string;
   userPurpose: string;
@@ -27,6 +28,7 @@ export const transformTransactions = (
       paymentState: transaction.paymentState,
       paymentType: transaction.paymentType,
       purpose: transaction.purpose,
+      fees: transaction.fees ?? 0,
       sender: transaction.sender,
       reciever: transaction.reciever,
       transactionId: transaction.transactionId,

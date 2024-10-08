@@ -12,25 +12,16 @@ import { IoIosArrowRoundBack } from 'react-icons/io';
 import { PiBankBold } from 'react-icons/pi';
 import { useDispatch } from 'react-redux';
 
-import { getMockCards } from '@/lib/circle/circle';
+import { mockCards } from '@/lib/circle/constants';
 import { setModal } from '@/lib/store/slices/modal';
 
 const FundingOptions = () => {
   const dispatch = useDispatch();
   const [isCard, setIsCard] = useState<boolean>(false);
-  const [circleCards, setCircleCards] = useState<
-    Record<string, string | number | object>[] | null
-  >(null);
   const nextModal = (value: string, data?: any) => {
     dispatch(setModal({ open: true, type: value, data }));
   };
 
-  const handleCards = async () => {
-    const res = await getMockCards();
-
-    setCircleCards(res.data);
-  };
-  handleCards();
   const arr = [
     {
       name: 'Bank Transfer',
@@ -73,22 +64,20 @@ const FundingOptions = () => {
           </>
         ) : (
           <>
-            {circleCards &&
-              circleCards?.length > 0 &&
-              circleCards?.map((i) => {
-                return (
-                  <button
-                    type="button"
-                    key={i.id as string}
-                    onClick={() => nextModal('deposit-card')}
-                    className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border border-[#3F5AB3] px-6 py-3 text-[#3F5AB3] hover:opacity-70 dark:invert"
-                  >
-                    <FaRegCreditCard />
-                    {i.issuerCountry as string} -{i.network as string} -{' '}
-                    {i.bin as string}
-                  </button>
-                );
-              })}
+            {mockCards?.map((i) => {
+              return (
+                <button
+                  type="button"
+                  key={i.id as string}
+                  onClick={() => nextModal('deposit-card')}
+                  className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border border-[#3F5AB3] px-6 py-3 text-[#3F5AB3] hover:opacity-70 dark:invert"
+                >
+                  <FaRegCreditCard />
+                  {i.issuerCountry as string} -{i.network as string} -{' '}
+                  {i.bin as string}
+                </button>
+              );
+            })}
           </>
         )}
       </div>
