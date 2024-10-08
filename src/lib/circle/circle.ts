@@ -2,7 +2,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { fetchUserIP } from '../utils/ipAddress';
 
-import { defaultCurrency, transferType } from './constants';
+import {
+  defaultCardSource,
+  defaultCurrency,
+  defaultMetadata,
+  transferType,
+} from './constants';
 
 const CIRCLE_API_BASE_URL = 'https://api-sandbox.circle.com';
 const CIRCLE_API_KEY = process.env.NEXT_PUBLIC_CIRCLE_API_KEY;
@@ -25,6 +30,7 @@ async function circleApiRequest(
   const options: RequestInit = {
     method,
     headers,
+    mode: 'no-cors',
     body: body ? JSON.stringify(body) : undefined,
   };
 
@@ -48,6 +54,14 @@ export async function createWallet(
 
 export async function getWalletBalance(walletId: string) {
   return circleApiRequest(`/v1/wallets/${walletId}`);
+}
+
+export async function getMockCards() {
+  return circleApiRequest(`/v1/cards`);
+}
+
+export async function getMockCard(cardId: string) {
+  return circleApiRequest(`/v1/cards/${cardId}`);
 }
 
 export async function createTransferWalletToWallet(params: {
@@ -164,4 +178,26 @@ export async function createCard(data: {
   };
 
   return circleApiRequest('/v1/cards', 'POST', dataa);
+}
+
+export async function mockCardDeposit(data: {
+  amount: string;
+  walletId: string;
+}) {
+  const dataa = {
+    idempotencyKey: uuidv4(),
+    autoCapture: true,
+    amount: {
+      amount: data.amount,
+      currency: defaultCurrency,
+    },
+    source: defaultCardSource,
+    description: data.walletId,
+    verificationSuccessUrl: '',
+    verificationFailureUrl: '',
+    metadata: defaultMetadata,
+    channel: '',
+    verification: 'none',
+  };
+  return circleApiRequest('/v1/payments', 'POST', dataa);
 }

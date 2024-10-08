@@ -7,10 +7,20 @@ export const defaultCurrency = 'USD';
 export const defaultUserWalletID = '1017206288';
 export const merchantWalletID = '1017206232';
 export const keyId = 'key1';
+export const defaultCardSource = {
+  id: '306b7ff5-55a2-42d4-98f1-2378b25f3864',
+  type: 'card',
+};
+export const defaultMetadata = {
+  email: 'customer-0005@circle.com',
+  phoneNumber: '+12025550180',
+  sessionId: 'xxx',
+  ipAddress: '172.33.222.1',
+};
 
 export const purpose = {
   fundBank: 'Fund Wallet (Bank)',
-  fundCrypto: 'Fund Wallet (Crypto)',
+  fundCard: 'Fund Wallet (Card)',
   debitBank: 'Withdraw from Wallet (Bank)',
   debitCrypto: 'Withdraw from Wallet (Crypto)',
   debitTransfer: 'Transfer to Wallet (finix)',
