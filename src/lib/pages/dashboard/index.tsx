@@ -7,6 +7,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { CiPower } from 'react-icons/ci';
 import { FaLocationArrow, FaCopy } from 'react-icons/fa6';
 import { FiArrowDownLeft } from 'react-icons/fi';
 import { LuArrowDownToLine, LuArrowUpToLine, LuPlus } from 'react-icons/lu';
@@ -24,7 +25,7 @@ import useIsMobile from '@/lib/hooks/isMobile';
 import { balance, transactions, user } from '@/lib/store';
 import { updateBalance } from '@/lib/store/slices/balance';
 import { setModal } from '@/lib/store/slices/modal';
-import { setTransactions } from '@/lib/store/slices/transactions';
+import { updateTransactionById } from '@/lib/store/slices/transactions';
 import { cn } from '@/lib/styles/utils';
 
 export interface TransactionProps {
@@ -55,6 +56,9 @@ const Header = ({ name }: { name: string }) => {
   const handleBank = () => {
     dispatch(setModal({ open: true, type: 'add-bank' }));
   };
+  const handleSignOut = () => {
+    dispatch(setModal({ open: true, type: 'sign-out' }));
+  };
   return (
     <div className="flex h-24 flex-col justify-between gap-3 rounded md:flex-row md:items-center">
       <div className="flex flex-row items-center justify-between gap-3 md:block">
@@ -65,6 +69,14 @@ const Header = ({ name }: { name: string }) => {
           {' '}
           <ThemeToggle />
         </span>
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="block md:hidden"
+        >
+          {' '}
+          <CiPower />
+        </button>
       </div>
       <div className="flex flex-row items-center gap-3 md:justify-center">
         <button
@@ -151,7 +163,7 @@ const CurrencySelect = ({
 );
 
 const Converter = () => {
-  const [amount, setAmount] = useState<number | null>(null);
+  const [amount, setAmount] = useState<number | string>('');
   const [fromCurrency, setFromCurrency] = useState<string>('USD');
   const [toCurrency, setToCurrency] = useState<string>('EUR');
   const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
@@ -160,7 +172,7 @@ const Converter = () => {
     e.preventDefault();
 
     const conversionRate = 0.85;
-    amount && setConvertedAmount(amount * conversionRate);
+    amount && setConvertedAmount((amount as number) * conversionRate);
   };
 
   return (
@@ -229,9 +241,10 @@ const TransactionTable = ({
 
     if (checkRes.status === 200 && checkRes.data) {
       dispatch(
-        setTransactions(
-          transformTransactions([checkRes.data] as OriginalTransactionProps[])
-        )
+        updateTransactionById({
+          transactionId: checkRes.data.id,
+          paymentState: checkRes.data.paymentState,
+        })
       );
       checkRes.data.paymentState === paymentState.paid &&
         dispatch(
@@ -288,9 +301,12 @@ const TransactionTable = ({
                 <p
                   className={cn('text-right text-xs font-normal dark:invert', {
                     'text-[#ee2929]': txn.paymentState === paymentState.failed,
-                    'text-[#eaaa0a]': txn.paymentState === paymentState.pending,
+                    'text-[#eaaa0a]':
+                      txn.paymentState === paymentState.pending ||
+                      txn.paymentState === paymentState.confirmed,
                     'text-[#07bf03]':
-                      txn.paymentState === paymentState.successful,
+                      txn.paymentState === paymentState.successful ||
+                      txn.paymentState === paymentState.paid,
                   })}
                 >
                   {txn.paymentState}

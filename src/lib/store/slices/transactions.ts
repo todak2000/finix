@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -26,14 +25,26 @@ const transactionsSlice = createSlice({
     setTransactions: (state, action: PayloadAction<TransactionProps[]>) => {
       Object.assign(state, action.payload);
     },
-    // New reducer to update the transaction state
     updateTransactions: (state, action: PayloadAction<TransactionProps>) => {
       state.push(action.payload);
+    },
+    // New reducer to update a single transaction by transactionId
+    updateTransactionById: (
+      state,
+      action: PayloadAction<{ transactionId: string; paymentState: string }>
+    ) => {
+      const { transactionId, paymentState } = action.payload;
+      const transaction = state.find(
+        (tx) => tx.transactionId === transactionId
+      );
+      if (transaction) {
+        transaction.paymentState = paymentState;
+      }
     },
   },
 });
 
-export const { setTransactions, updateTransactions } =
+export const { setTransactions, updateTransactions, updateTransactionById } =
   transactionsSlice.actions;
 
 export default transactionsSlice.reducer;
