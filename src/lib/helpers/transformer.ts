@@ -18,20 +18,22 @@ export interface OriginalTransactionProps {
 export const transformTransactions = (
   originalTransactions: OriginalTransactionProps[]
 ) => {
-  return originalTransactions.map((transaction) => ({
-    amount: transaction.amount,
-    createdAt: transaction.createdAt.seconds, // Transforming createdAt
-    fullname: transaction.fullname,
-    id: transaction.id,
-    paymentState: transaction.paymentState,
-    paymentType: transaction.paymentType,
-    purpose: transaction.purpose,
-    sender: transaction.sender,
-    reciever: transaction.reciever,
-    transactionId: transaction.transactionId,
-    userPurpose: transaction.userPurpose,
-    walletId: transaction.walletId,
-  }));
+  return originalTransactions
+    .map((transaction) => ({
+      amount: transaction.amount,
+      createdAt: transaction.createdAt.seconds, // Transforming createdAt
+      fullname: transaction.fullname,
+      id: transaction.id,
+      paymentState: transaction.paymentState,
+      paymentType: transaction.paymentType,
+      purpose: transaction.purpose,
+      sender: transaction.sender,
+      reciever: transaction.reciever,
+      transactionId: transaction.transactionId,
+      userPurpose: transaction.userPurpose,
+      walletId: transaction.walletId,
+    }))
+    .sort((a, b) => b.createdAt - a.createdAt); // Sort in descending order
 };
 
 export const sanitizeAmount = (value: string): string => {

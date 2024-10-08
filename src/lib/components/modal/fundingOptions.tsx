@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
@@ -5,18 +6,31 @@
 
 'use client';
 
-import { FaBitcoin } from 'react-icons/fa6';
+import { useState } from 'react';
+import { FaRegCreditCard } from 'react-icons/fa6';
+import { IoIosArrowRoundBack } from 'react-icons/io';
 import { PiBankBold } from 'react-icons/pi';
 import { useDispatch } from 'react-redux';
 
+import { getMockCards } from '@/lib/circle/circle';
 import { setModal } from '@/lib/store/slices/modal';
 
 const FundingOptions = () => {
   const dispatch = useDispatch();
+  const [isCard, setIsCard] = useState<boolean>(false);
+  const [circleCards, setCircleCards] = useState<
+    Record<string, string | number | object>[] | null
+  >(null);
   const nextModal = (value: string, data?: any) => {
     dispatch(setModal({ open: true, type: value, data }));
   };
 
+  const handleCards = async () => {
+    const res = await getMockCards();
+
+    setCircleCards(res.data);
+  };
+  handleCards();
   const arr = [
     {
       name: 'Bank Transfer',
@@ -27,12 +41,10 @@ const FundingOptions = () => {
       },
     },
     {
-      name: 'Crypto',
-      icon: <FaBitcoin />,
-      value: 'crypto',
-      onClick: () => {
-        nextModal('crypto');
-      },
+      name: 'Card',
+      icon: <FaRegCreditCard />,
+      value: 'card',
+      onClick: () => setIsCard(true),
     },
   ];
 
@@ -41,21 +53,55 @@ const FundingOptions = () => {
       <h5 className="font-merry text-center text-sm dark:invert">
         Deposit Options
       </h5>
+
       <div className="mb-6 w-full space-y-3">
-        {arr.map((i) => {
-          return (
-            <button
-              type="button"
-              key={i.name}
-              onClick={i.onClick}
-              className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border border-[#3F5AB3] px-6 py-3 text-[#3F5AB3] hover:opacity-70 dark:invert"
-            >
-              {i.icon}
-              {i.name}
-            </button>
-          );
-        })}
+        {!isCard ? (
+          <>
+            {arr.map((i) => {
+              return (
+                <button
+                  type="button"
+                  key={i.name}
+                  onClick={i.onClick}
+                  className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border border-[#3F5AB3] px-6 py-3 text-[#3F5AB3] hover:opacity-70 dark:invert"
+                >
+                  {i.icon}
+                  {i.name}
+                </button>
+              );
+            })}
+          </>
+        ) : (
+          <>
+            {circleCards &&
+              circleCards?.length > 0 &&
+              circleCards?.map((i) => {
+                return (
+                  <button
+                    type="button"
+                    key={i.id as string}
+                    onClick={() => nextModal('deposit-card')}
+                    className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-lg border border-[#3F5AB3] px-6 py-3 text-[#3F5AB3] hover:opacity-70 dark:invert"
+                  >
+                    <FaRegCreditCard />
+                    {i.issuerCountry as string} -{i.network as string} -{' '}
+                    {i.bin as string}
+                  </button>
+                );
+              })}
+          </>
+        )}
       </div>
+      {isCard && (
+        <button
+          type="button"
+          onClick={() => setIsCard(false)}
+          className="flex flex-row items-center justify-center space-x-3 text-gray-400"
+        >
+          <IoIosArrowRoundBack />
+          Back
+        </button>
+      )}
     </div>
   );
 };

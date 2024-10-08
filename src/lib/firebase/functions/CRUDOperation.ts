@@ -18,6 +18,7 @@ import {
   where,
   limit,
   orderBy,
+  arrayUnion,
 } from 'firebase/firestore';
 
 import { db } from '..';
@@ -175,6 +176,32 @@ export default class CRUDOperation<T> {
       return items ?? [];
     } catch (error: unknown) {
       throw new Error('An error occurred while fetching documents');
+    }
+  }
+
+  async updateArr(id: string, key: string, newObject: any) {
+    // Added key and newObject parameters
+    try {
+      const firestoreDoc = doc(db, this.collectionName, id);
+      const docSnapshot = await getDoc(firestoreDoc); // Fetch the document snapshot
+
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        if (data && Array.isArray(data[key])) {
+          // Check if the key exists and is an array
+          await setDoc(
+            firestoreDoc,
+            { [key]: arrayUnion(newObject) },
+            { merge: true }
+          ); // Add to existing array
+        } else {
+          await setDoc(firestoreDoc, { [key]: [newObject] }, { merge: true }); // Create new array with the object
+        }
+      } else {
+        await setDoc(firestoreDoc, { [key]: [newObject] }, { merge: true }); // Create new key with array if document doesn't exist
+      }
+    } catch (error: unknown) {
+      throw new Error(errMessage);
     }
   }
 }

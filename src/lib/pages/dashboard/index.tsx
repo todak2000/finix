@@ -1,14 +1,15 @@
+/* eslint-disable no-console */
+/* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useMemo, useState, useEffect } from 'react';
-import { FaLocationArrow } from 'react-icons/fa6';
+import { useMemo, useState } from 'react';
+import { FaLocationArrow, FaCopy } from 'react-icons/fa6';
 import { FiArrowDownLeft } from 'react-icons/fi';
-import { LuArrowDownToLine, LuArrowUpToLine } from 'react-icons/lu';
+import { LuArrowDownToLine, LuArrowUpToLine, LuPlus } from 'react-icons/lu';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { paymentState } from '@/lib/circle/constants';
@@ -43,6 +44,10 @@ const Header = ({ name }: { name: string }) => {
   const handleWithdrawal = () => {
     dispatch(setModal({ open: true, type: 'withdraw-options' }));
   };
+
+  const handleBank = () => {
+    dispatch(setModal({ open: true, type: 'add-bank' }));
+  };
   return (
     <div className="flex h-24 flex-col justify-between gap-3 rounded md:flex-row md:items-center">
       <div className="flex flex-row items-center justify-between gap-3 md:block">
@@ -71,19 +76,49 @@ const Header = ({ name }: { name: string }) => {
         >
           Send Fund <FaLocationArrow />
         </button>
+        <button
+          type="button"
+          onClick={handleBank}
+          className="flex flex-row items-center justify-center gap-2 rounded-lg border border-[#222222] px-4 py-2 text-sm font-normal dark:border-white"
+        >
+          Add Bank Details <LuPlus />
+        </button>
       </div>
     </div>
   );
 };
 
 const WalletBalance = ({ name, bal }: { name: string; bal: number }) => {
+  const [copySuccess, setCopySuccess] = useState('');
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(name) // Copy the content to clipboard
+      .then(() => {
+        setCopySuccess('Copied!');
+        setTimeout(() => {
+          setCopySuccess('');
+        }, 2000);
+      }) // Set success message
+      .catch((err) => console.error('Failed to copy: ', err));
+  };
   return (
     <div className="flex max-w-96 flex-col gap-5 rounded-xl bg-white p-6 shadow dark:invert">
       <p className="text-lg font-normal text-[#222222]">USDC Balance</p>
       <p className="text-2xl font-bold text-[#3F5AB3] dark:invert">
         ${formatAsMoney(bal)}
       </p>
-      <p className="text-lg font-normal text-[#3F5AB3] dark:invert">{name}</p>
+      <div className="flex items-center">
+        <p className="text-lg font-normal text-[#3F5AB3] dark:invert">{name}</p>
+        <FaCopy
+          className="ml-2 cursor-pointer text-2xl text-gray-400 hover:opacity-70"
+          onClick={handleCopy}
+        />{' '}
+        {/* Copy icon */}
+        {copySuccess && (
+          <span className="ml-2 text-xs text-gray-500">{copySuccess}</span>
+        )}{' '}
+        {/* Success message */}
+      </div>
     </div>
   );
 };
@@ -218,15 +253,13 @@ const TransactionTable = ({
 const Dashboard = () => {
   const data = useSelector(user);
   const txns = useSelector(transactions);
-  const { push } = useRouter();
+
   const walletId = useMemo(() => {
     return data && (data as { walletId: string }).walletId;
   }, [data]);
 
   const bal = useSelector(balance);
-  useEffect(() => {
-    if (!walletId) push('/');
-  }, [walletId]);
+
   return (
     <div className="overflow-y-auto md:h-[80vh] md:overflow-hidden">
       {walletId && data ? (

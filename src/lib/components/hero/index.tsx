@@ -33,7 +33,7 @@ const HeroSection: React.FC = () => {
       </h1>
       <p className="my-8 text-lg md:text-xl">{heroHeaders.subHeader}</p>
       <div className="flex flex-row items-center justify-center space-x-6">
-        {userr && (userr as { displayName: string }).displayName && (
+        {(!userr || !(userr as { displayName: string }).displayName) && (
           <button
             type="button"
             onClick={handleOnboarding}

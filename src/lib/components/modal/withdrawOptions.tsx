@@ -5,13 +5,20 @@
 
 'use client';
 
+import { CiBank } from 'react-icons/ci';
 import { FaBitcoin } from 'react-icons/fa6';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { user } from '@/lib/store';
 import { setModal } from '@/lib/store/slices/modal';
 
 const WithdrawOptions = () => {
   const dispatch = useDispatch();
+  const userr = useSelector(user);
+
+  const userData = userr as {
+    bankData: Record<string, string | number>[];
+  };
   const nextModal = (value: string, data?: any) => {
     dispatch(setModal({ open: true, type: value, data }));
   };
@@ -23,6 +30,18 @@ const WithdrawOptions = () => {
       value: 'finix',
       onClick: () => {
         nextModal('finix');
+      },
+    },
+    {
+      name: 'Local Bank',
+      icon: <CiBank />,
+      value: 'withdraw-bank',
+      onClick: () => {
+        nextModal(
+          userData.bankData && userData.bankData.length > 0
+            ? 'withdraw-bank'
+            : 'add-bank'
+        );
       },
     },
   ];

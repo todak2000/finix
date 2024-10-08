@@ -32,7 +32,7 @@ const CallToAction: React.FC = () => {
       <div className="container mx-auto space-y-6 px-4 text-center">
         <h2 className="mb-4 font-bold">{ctaContent.header}</h2>
         <p className="mb-6">{ctaContent.subHeader}</p>
-        {userr && (userr as { displayName: string }).displayName && (
+        {(!userr || !(userr as { displayName: string }).displayName) && (
           <button
             type="button"
             onClick={handleOnboarding}

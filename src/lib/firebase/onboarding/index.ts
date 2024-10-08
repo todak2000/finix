@@ -179,3 +179,23 @@ export const getUserByEmail = async (email: string) => {
     };
   }
 };
+
+export const addUserBank = async (data: {
+  userId: string;
+  bankData: Record<string, string | number>;
+}) => {
+  try {
+    await userOperation.updateArr(data.userId, 'bankData', data.bankData);
+    const { data: userData } = await getUser(data.userId as string);
+    return {
+      status: 200,
+      data: userData,
+      message: 'bank data added successfully!',
+    };
+  } catch (error: any) {
+    return {
+      status: 500,
+      message: `Error updating bank data:${error.message}`,
+    };
+  }
+};
