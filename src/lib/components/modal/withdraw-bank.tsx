@@ -45,7 +45,6 @@ const WithdrawBank = () => {
     amount: '',
     bank: '',
   });
-  console.log(userData.bankData, 'bank data firestore');
   const withdrawToBank = async () => {
     setLoading(true);
     try {

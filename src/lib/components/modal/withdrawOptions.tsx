@@ -6,7 +6,7 @@
 'use client';
 
 import { CiBank } from 'react-icons/ci';
-import { FaBitcoin } from 'react-icons/fa6';
+import { FaMoneyBillTransfer } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { user } from '@/lib/store';
@@ -26,7 +26,7 @@ const WithdrawOptions = () => {
   const arr = [
     {
       name: 'Finix',
-      icon: <FaBitcoin />,
+      icon: <FaMoneyBillTransfer />,
       value: 'finix',
       onClick: () => {
         nextModal('finix');

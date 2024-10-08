@@ -11,4 +11,32 @@ module.exports = withPWA({
   eslint: {
     dirs: ['src'],
   },
+  async headers() {
+    const headers = [];
+    if (process.env.NODE_ENV === "development") {
+      headers.push({
+        source: "/:path*",
+        headers: [
+          {
+            key: "Referrer-Policy",
+            value: "no-referrer-when-downgrade",
+          },
+        ],
+      });
+    }
+    headers.push({
+      source: "/:path*",
+      headers: [
+        {
+          key: "Cross-Origin-Opener-Policy",
+          value: "same-origin",
+        },
+        {
+          key: "Cross-Origin-Opener-Policy",
+          value: "same-origin-allow-popups",
+        },
+      ],
+    });
+    return headers;
+  },
 });

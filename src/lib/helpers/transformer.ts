@@ -1,9 +1,11 @@
 export interface OriginalTransactionProps {
   amount: string;
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  createdAt:
+    | {
+        seconds: number;
+        nanoseconds: number;
+      }
+    | number;
   fullname: string;
   id: string;
   paymentState: string;
@@ -22,7 +24,10 @@ export const transformTransactions = (
   return originalTransactions
     .map((transaction) => ({
       amount: transaction.amount,
-      createdAt: transaction.createdAt.seconds, // Transforming createdAt
+      createdAt:
+        typeof transaction.createdAt === 'number'
+          ? transaction.createdAt
+          : transaction.createdAt.seconds, // Transforming createdAt
       fullname: transaction.fullname,
       id: transaction.id,
       paymentState: transaction.paymentState,

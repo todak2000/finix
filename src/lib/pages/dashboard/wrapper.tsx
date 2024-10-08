@@ -41,6 +41,7 @@ const DashboardWrapper = ({
             {arr.map((i) => {
               return (
                 <Link
+                  key={i.name}
                   className="flex flex-row items-center gap-3 text-black"
                   href={i.path}
                 >
