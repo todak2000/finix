@@ -58,11 +58,11 @@ const DepositCard = () => {
           | 'failed',
         walletId: userData.walletId,
       };
-      await mockCardDeposit({
+      const r = await mockCardDeposit({
         amount: depositData.amount,
         walletId: userData.walletId,
       });
-
+      console.log(r, 'deposit i card resilt');
       await recordTransaction(txnData);
       const { data: txnnData } = await getUserTransaction(userData.walletId);
       dispatch(
@@ -99,7 +99,6 @@ const DepositCard = () => {
     setLoading(true);
     e.preventDefault();
     if (validateForm()) {
-      console.log(depositData);
       await depositViaCard();
     } else {
       setLoading(false);
@@ -117,7 +116,7 @@ const DepositCard = () => {
           <input
             type="number"
             name="amount"
-            placeholder="Amount to Withdraw"
+            placeholder="Amount to Deposit"
             value={depositData.amount}
             onChange={handleChange}
             className="mb-4 w-full rounded border-none bg-[#71b2e72c] p-2 text-gray-500 focus:border-[#3F5AB3] focus:ring-[#3F5AB3] dark:invert"
