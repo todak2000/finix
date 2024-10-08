@@ -20,13 +20,13 @@ import {
   getUserTransaction,
   recordTransaction,
 } from '@/lib/firebase/transactions';
+import { finixFees, formatAsMoney } from '@/lib/helpers/formatMoney';
 import { Toast } from '@/lib/helpers/Toast';
 import type { OriginalTransactionProps } from '@/lib/helpers/transformer';
 import { transformTransactions } from '@/lib/helpers/transformer';
 import { user } from '@/lib/store';
 import { setModal } from '@/lib/store/slices/modal';
 import { setTransactions } from '@/lib/store/slices/transactions';
-import { finixFees, formatAsMoney } from '@/lib/helpers/formatMoney';
 
 const Bank = () => {
   const userr = useSelector(user);
