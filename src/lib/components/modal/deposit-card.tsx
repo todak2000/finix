@@ -68,8 +68,7 @@ const DepositCard = () => {
       await recordTransaction({
         ...txnData,
         transactionId: data.id,
-        amount: finixFees(depositData.amount).paidAmount,
-        fees: finixFees(depositData.amount).fees,
+        amount: depositData.amount,
       });
       const { data: txnnData } = await getUserTransaction(userData.walletId);
       dispatch(

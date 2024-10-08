@@ -15,8 +15,13 @@ import { Timestamp } from 'firebase/firestore';
 import { firebaseAuth, provider } from '..';
 import Collection from '../db';
 import CRUDOperation from '../functions/CRUDOperation';
+import { recordTransaction } from '../transactions';
 import { createTransferWalletToWallet } from '@/lib/circle/circle';
-import { merchantWalletID } from '@/lib/circle/constants';
+import {
+  merchantWalletID,
+  paymentState,
+  transactionType,
+} from '@/lib/circle/constants';
 import { createSession, removeSession } from '@/lib/serverActions/auth';
 import { createCircleWallet } from '@/lib/serverActions/circle';
 
@@ -62,13 +67,29 @@ export const signInWithGoogle = async () => {
             destinationWalletId: walletId as string,
             amount: '10',
           }));
+        const txnData = {
+          purpose: 'Welcome Bonus $10',
+          userPurpose: '',
+          paymentType: transactionType.credit as 'credit' | 'debit',
+          amount: '10',
+          fullname: result.user.displayName as string,
+          sender: 'finix',
+          reciever: walletId as string,
+          paymentState: paymentState.successful as
+            | 'pending'
+            | 'successful'
+            | 'failed',
+          walletId: merchantWalletID,
+        };
+        walletId && (await recordTransaction(txnData));
       }
       createSession(result.user.uid);
 
       return {
         status: 200,
-        message:
-          'Yah! welcome on board, you have just recieved a welcome bonus of $10.',
+        message: existingUser
+          ? 'Welcome!'
+          : 'Yah! welcome on board, you have just recieved a welcome bonus of $10.',
         user:
           existingUser && existingUser.length === 1
             ? existingUser[0]
