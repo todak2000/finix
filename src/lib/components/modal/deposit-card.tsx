@@ -63,7 +63,6 @@ const DepositCard = () => {
         amount: depositData.amount,
         walletId: userData.walletId,
       });
-      console.log(data.id, 'deposit i card resilt');
       await recordTransaction({
         ...txnData,
         transactionId: data.id,

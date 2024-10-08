@@ -62,9 +62,7 @@ const Finix = () => {
             | 'failed',
           walletId: userData.walletId,
         };
-        console.log(txnData, 'data txn');
-        const c = await recordTransaction(txnData);
-        console.log(c, 'data txn');
+        await recordTransaction(txnData);
         const { data: txnnData } = await getUserTransaction(userData.walletId);
         dispatch(
           setTransactions(

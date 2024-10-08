@@ -210,10 +210,9 @@ const TransactionTable = ({
 }) => {
   const dispatch = useDispatch();
   const handleConfirmation = async (id: string, transactionState: string) => {
-    // 'b3911534-d3d3-46d3-9a99-c76ac76f9885'
-    // 46cf12ae-ac6b-4b63-8ae7-793e1cff1573
+
     const checkRes = await checkPayment(id, transactionState);
-    console.log(checkRes, 'check res--');
+
     if (checkRes.status === 200 && checkRes.data) {
       dispatch(
         setTransactions(
