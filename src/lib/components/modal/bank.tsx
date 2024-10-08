@@ -26,6 +26,7 @@ import { transformTransactions } from '@/lib/helpers/transformer';
 import { user } from '@/lib/store';
 import { setModal } from '@/lib/store/slices/modal';
 import { setTransactions } from '@/lib/store/slices/transactions';
+import { finixFees, formatAsMoney } from '@/lib/helpers/formatMoney';
 
 const Bank = () => {
   const userr = useSelector(user);
@@ -35,7 +36,10 @@ const Bank = () => {
   const [purpose, setPurpose] = useState<string>('');
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [otherData, setOtherData] = useState({
+    paidAmount: 0,
+    fees: 0,
+  });
   const initiateDeposit = async () => {
     setLoading(true);
     try {
@@ -92,7 +96,15 @@ const Bank = () => {
       <h5 className="font-merry text-center text-sm dark:invert">
         Enter Amount to Deposit
       </h5>
-      <div className="w-full bg-white py-6">
+      <div className="w-full bg-white pb-6">
+        {otherData.paidAmount > 0 && (
+          <p className="my-3 rounded-lg p-2 text-center text-sm text-[#3F5AB3]">
+            You will recieve{' '}
+            <strong>${formatAsMoney(otherData.paidAmount)}</strong> in your
+            wallet. There is a charge of{' '}
+            <strong>${formatAsMoney(otherData.fees)}</strong>
+          </p>
+        )}
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -104,7 +116,14 @@ const Bank = () => {
             type="number"
             placeholder="Amount"
             value={amountToDeposit as number}
-            onChange={(e) => setAmountToDeposit(Number(e.target.value))}
+            onChange={(e) => {
+              const realAmount = finixFees(e.target.value);
+              setAmountToDeposit(Number(e.target.value));
+              setOtherData({
+                paidAmount: realAmount.paidAmount,
+                fees: realAmount.fees,
+              });
+            }}
             className="mb-6 w-full rounded border-none bg-[#71b2e72c] p-2 text-gray-500 focus:border-[#3F5AB3] focus:ring-[#3F5AB3] dark:invert"
             required
           />

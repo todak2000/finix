@@ -209,7 +209,22 @@ const TransactionTable = ({
   walletId: string;
 }) => {
   const dispatch = useDispatch();
-  const handleConfirmation = async (id: string, transactionState: string) => {
+  const handleConfirmation = async (
+    id: string,
+    transactionState: string,
+    currentData: TransactionProps
+  ) => {
+    const txn = transformTransactions([
+      currentData,
+    ] as OriginalTransactionProps[]);
+    dispatch(
+      setModal({
+        open: true,
+        type: 'transaction-details',
+        data: txn[0],
+      })
+    );
+
     const checkRes = await checkPayment(id, transactionState);
 
     if (checkRes.status === 200 && checkRes.data) {
@@ -238,7 +253,8 @@ const TransactionTable = ({
               onClick={() =>
                 handleConfirmation(
                   txn.transactionId ?? txn.id,
-                  txn.paymentState
+                  txn.paymentState,
+                  txn
                 )
               }
               key={txn.transactionId}

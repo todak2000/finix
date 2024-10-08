@@ -6,6 +6,7 @@ import DepositCard from './deposit-card';
 import Finix from './finix';
 import FundingOptions from './fundingOptions';
 import BankInstructions from './instructions';
+import TransactionDetails from './transaction-details';
 import WithdrawBank from './withdraw-bank';
 import WithdrawOptions from './withdrawOptions';
 
@@ -32,6 +33,9 @@ export const ModalChild = (
       return <WithdrawBank />;
     case 'deposit-card':
       return <DepositCard />;
+    case 'transaction-details':
+      return <TransactionDetails data={data} />;
+
     default:
       return (
         <span>

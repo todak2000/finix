@@ -20,7 +20,7 @@ import {
   getUserTransaction,
   recordTransaction,
 } from '@/lib/firebase/transactions';
-import { finixFees } from '@/lib/helpers/formatMoney';
+import { finixFees, formatAsMoney } from '@/lib/helpers/formatMoney';
 import { Toast } from '@/lib/helpers/Toast';
 import type { OriginalTransactionProps } from '@/lib/helpers/transformer';
 import { transformTransactions } from '@/lib/helpers/transformer';
@@ -41,6 +41,8 @@ const DepositCard = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [depositData, setDepositData] = useState({
     amount: '',
+    paidAmount: 0,
+    fees: 0,
   });
   const depositViaCard = async () => {
     setLoading(true);
@@ -92,22 +94,23 @@ const DepositCard = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setDepositData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const validateForm = () => {
-    return Object.values(depositData).every((field) => field.trim() !== '');
+    const { value } = e.target;
+    const realAmount = finixFees(value);
+    setDepositData({
+      amount: value,
+      paidAmount: realAmount.paidAmount,
+      fees: realAmount.fees,
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
-    if (validateForm()) {
+    if (depositData.amount !== '') {
       await depositViaCard();
     } else {
       setLoading(false);
-      Toast.error({ msg: 'Please fill in all fields.' });
+      Toast.error({ msg: 'Please enter the amount.' });
     }
   };
 
@@ -116,7 +119,15 @@ const DepositCard = () => {
       <h5 className="font-merry text-center text-sm dark:invert">
         Deposit with Card
       </h5>
-      <div className="w-full bg-white py-6">
+      <div className="w-full bg-white pb-6">
+        {depositData.paidAmount > 0 && (
+          <p className="my-3 rounded-lg p-2 text-center text-sm text-[#3F5AB3]">
+            You will recieve{' '}
+            <strong>${formatAsMoney(depositData.paidAmount)}</strong> in your
+            wallet. There is a charge of{' '}
+            <strong>${formatAsMoney(depositData.fees)}</strong>
+          </p>
+        )}
         <form onSubmit={handleSubmit}>
           <input
             type="number"
