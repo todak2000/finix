@@ -27,7 +27,7 @@ const HeroSection: React.FC = () => {
     console.log(res, 'oboading response');
   };
   return (
-    <div className="dark:inverted flex min-h-[50vh] flex-col items-center justify-center bg-cover bg-center text-center">
+    <div className="dark:inverted flex min-h-[50vh] flex-col items-center justify-center bg-cover bg-center px-6 text-center">
       <h1 className="mb-4 font-logo text-4xl font-extrabold md:text-6xl">
         {heroHeaders.header}
       </h1>

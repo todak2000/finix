@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-console */
 
@@ -35,6 +36,12 @@ export const Header = ({
     await handleGoogle(push);
     setLoading(false);
   };
+
+  const handleTransition = (id: string) => {
+    const doc = document.getElementById(id);
+    doc && doc.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <header className="border-primary sticky top-0 z-10 w-full border-b backdrop-blur-md">
       <section className="wrapper mx-auto flex items-center justify-between py-2">
@@ -54,6 +61,14 @@ export const Header = ({
                     <Link
                       key={i.text}
                       href={i.link}
+                      onClick={
+                        i.link.includes('#')
+                          ? (e) => {
+                              e.preventDefault();
+                              handleTransition(i.link.split('#')[1]);
+                            }
+                          : () => null
+                      }
                       className="font-logo text-sm font-medium hover:opacity-70"
                     >
                       {i.text}
