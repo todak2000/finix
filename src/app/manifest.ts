@@ -16,7 +16,7 @@ const manifest = (): MetadataRoute.Manifest => ({
     {
       src: '/logo.svg',
       purpose: 'any',
-      sizes: '48x48 72x72 96x96 128x128 256x256',
+      sizes: '48x48 72x72 96x96 128x128 192x192 256x256 512x512',
     },
   ],
 });

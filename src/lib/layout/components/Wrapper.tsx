@@ -13,6 +13,7 @@ import { setModal } from '@/lib/store/slices/modal';
 
 import { Footer } from './footer';
 import { Header } from './header';
+import InstallButton from '@/lib/components/install-app';
 
 const WrapperComponent = ({
   children,
@@ -30,6 +31,7 @@ const WrapperComponent = ({
   };
   return (
     <div className="flex min-h-screen flex-col">
+      <InstallButton />
       <Modal isOpen={modall.open} onClose={closeModal}>
         {ModalChild(modall.type, modall.data)}
       </Modal>
