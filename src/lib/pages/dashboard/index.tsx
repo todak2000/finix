@@ -151,7 +151,7 @@ const CurrencySelect = ({
   value: string;
   onChange: (value: string) => void;
 }) => (
-  <div className="rounded border border-[#71B1E7] p-2 focus:border-[#3F5AB3] focus:ring-[#3F5AB3] dark:invert">
+  <div className="rounded border border-[#71B1E7] p-2 focus:border-0 focus:ring-0 dark:invert">
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}

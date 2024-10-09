@@ -24,12 +24,13 @@ To democratize access to stable digital currency, providing a secure and user-fr
 
 ### Key Features
 
-1. User-controlled USDC wallets
+1. USDC wallets
 2. Social login authentication
 3. USDC transactions (send/receive)
 4. Fiat currency on/off ramps
-5. Transaction history and analytics
-6. Admin dashboard for enterprise clients (TODO)
+5. Transaction history
+6. Inter-wallet transfer
+7. On-ramp/Off-ramp via bank and card payment
 
 ## Technical Architecture
 
@@ -45,17 +46,14 @@ To democratize access to stable digital currency, providing a secure and user-fr
 - **Framework**: Next.js (API routes)
 - **Key Libraries**:
   - Circle's APIs for USDC transactions and account management
-  - Firebase for user data and transaction records
 
 ### Database
 
-- **Database**: Firebase
-- **Data Management**: User data and transaction records are stored securely with data encryption at rest.
+- **Database**: Firebase for user data and transaction records
 
 ### Hosting and Deployment
 
 - **Platform**: Vercel
-- **CI/CD**: Implemented for automated testing and deployment.
 
 ## Functional Requirements
 
@@ -75,14 +73,14 @@ To democratize access to stable digital currency, providing a secure and user-fr
 - Enable sending USDC to other users on Finix using their emails just like PayPal.
 - Enable sending USDC to external addresses like bank accounts.
 - Support receiving USDC from other users on Finix.
-- Support receiving USDC from other users via bank or external sources. (TODO)
+- Support receiving USDC from other users via bank
 - Implement transaction list/table.
-- Implement transaction confirmation and receipt generation. (TODO)
+- Implement transaction confirmation and receipt generation.
 
 ### Fiat On/Off Ramps
 
 - Integrate Circle's Payments API for buying/minting USDC with local currencies via bank.
-- Support withdrawal of USDC to local bank accounts or payment systems. (TODO)
+- Support withdrawal of USDC to local bank accounts or payment systems.
 
 ### Analytics and Reporting (TODO)
 
@@ -169,3 +167,12 @@ To democratize access to stable digital currency, providing a secure and user-fr
 
 - **Frontend**: Located in the `src` directory, with pages and components organized for easy navigation.
 - **Backend**: API routes are defined in the `src/app/api` directory, handling requests related to user authentication, wallet management, and transactions.
+
+## Acknowledgement
+- [Circle](https://www.circle.com/en/)
+- [AngelHack](https://angelhack.com/)
+- [All participants, Mentors of the Circle Prodev Hackathon](https://tribegroup.notion.site/Circle-Prodev-Hackathon-Participant-s-Guide-34487559121e4b1c8268f269c9c085d2)
+
+## Author
+- [Daniel Olagunju](https://github.com/todak2000)
+- [Emmanuel Obadaki](https://github.com/Gudnuel)
