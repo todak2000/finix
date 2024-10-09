@@ -1,7 +1,7 @@
 export const howHeaders = {
   header: 'How It Works',
   subHeader:
-    'Access, send, and receive USDC anywhere in the world – no bank accountrequired.',
+    'Access, send, and receive USDC anywhere in the world – no bank account required.',
 };
 
 export const cardArr = [
