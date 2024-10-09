@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
+import { MdOutlineDownload } from 'react-icons/md';
 
 const InstallButton: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
@@ -47,8 +48,13 @@ const InstallButton: React.FC = () => {
   }
 
   return (
-    <button type="button" onClick={handleInstallClick}>
-      Install App
+    <button
+      type="button"
+      onClick={handleInstallClick}
+      className="btn-gradient fixed left-0 top-1/2 z-[1000] flex w-[100px] flex-col items-center justify-center gap-1 rounded-r-full px-2 py-4 text-xs hover:opacity-70"
+    >
+      <MdOutlineDownload size={30} />
+      Install Finix
     </button>
   );
 };

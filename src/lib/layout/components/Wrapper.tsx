@@ -5,15 +5,16 @@ import { type ReactElement, type ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 
+import InstallButton from '@/lib/components/install-app';
 import { ModalChild } from '@/lib/components/modal';
 import Modal from '@/lib/components/modal/modal';
+import useIsMobile from '@/lib/hooks/isMobile';
 import DashboardWrapper from '@/lib/pages/dashboard/wrapper';
 import { modal } from '@/lib/store';
 import { setModal } from '@/lib/store/slices/modal';
 
 import { Footer } from './footer';
 import { Header } from './header';
-import InstallButton from '@/lib/components/install-app';
 
 const WrapperComponent = ({
   children,
@@ -25,13 +26,13 @@ const WrapperComponent = ({
   const dispatch = useDispatch();
   const modall = useSelector(modal);
   const path = usePathname();
+  const isMobile = useIsMobile();
   const isHome = path === '/';
   const closeModal = () => {
     dispatch(setModal({ open: false, type: '' }));
   };
   return (
-    <div className="flex min-h-screen flex-col">
-      <InstallButton />
+    <div className="relative flex min-h-screen flex-col">
       <Modal isOpen={modall.open} onClose={closeModal}>
         {ModalChild(modall.type, modall.data)}
       </Modal>
@@ -45,6 +46,7 @@ const WrapperComponent = ({
       ) : (
         <DashboardWrapper session={session}>{children}</DashboardWrapper>
       )}
+      {isHome && isMobile && <InstallButton />}
     </div>
   );
 };
