@@ -8,12 +8,6 @@ Finix is a web application designed to provide global access to digital dollars,
 
 <img src="public/seo/ReadMe.png" alt="Alt Text">
 
-## LightHouse Score
-
-![Light house score - Desktop](lighthouse_results/desktop/pagespeed.svg)
-
-[LIGHTHOUSE SCORE LINK](https://htmlpreview.github.io/?https://github.com/todak2000/finix-five/blob/main/lighthouse_results/desktop/finix-five.vercel.app.html)
-
 ## URL
 
 https://finix-five.vercel.app
